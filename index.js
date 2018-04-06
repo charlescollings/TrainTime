@@ -1,4 +1,4 @@
-
+$(document).ready(function() {
   var config = {
     apiKey: "AIzaSyDHGpBBPU8AHz4TBX0aS6yW9Lo6Btkxwqc",
     authDomain: "traintime-e5b21.firebaseapp.com",
@@ -12,13 +12,14 @@
 
 var trainData = firebase.database();
 
-$('#add-train-btn').on('click', function() {
-    debugger;
+$('#add-train-btn').on('click', function(event) {
+    event.preventDefault();
+
     // grab user input
-    let trainName = $('#train-name-input').val().trim();
-    let destination = $('#destiniation-input').val().trim();
-    let firstTrain = $('#first-train-input').val().trim();
-    let frequency = $('#frequency-input').val().trim();
+    let trainName = $('#train-name-input').val();
+    let destination = $('#destination-input').val();
+    let firstTrain = $('#first-train-input').val();
+    let frequency = $('#frequency-input').val();
 
     // add user input to train object
     let newTrain = {
@@ -27,17 +28,17 @@ $('#add-train-btn').on('click', function() {
         firstTrain: firstTrain,
         frequency: frequency,
     }
-    console.log(newTrain);
+
     //upload train to database
     trainData.ref().push(newTrain);
 
-    return false;
+    // return false;
 });
 
 // add data event
 trainData.ref().on("child_added", function(childSnapshot, prevChildKey) {
     //store everything into a variable
-    console.log(childSnapshot.val());
+
     let tName = childSnapshot.val().name;
     let tDestination = childSnapshot.val().destination;
     let tFrequency = childSnapshot.val().frequency;
@@ -66,4 +67,4 @@ trainData.ref().on("child_added", function(childSnapshot, prevChildKey) {
     $("#train-table > tbody").append('<tr><td>' + tName + '</td><td>' + tDestination + '</td><td>' + tFrequency + '</td><td>' + tArrival + '</td><td>' + tMinutes + '</td></tr>');
 });
 
-
+})
